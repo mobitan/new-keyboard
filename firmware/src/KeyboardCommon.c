@@ -78,6 +78,7 @@ static uint8_t const modKeys[MAX_MOD + 1][MAX_MOD_KEY_NAME] =
     {KEY_S, KEY_J, KEY_M, KEY_A, KEY_C, KEY_ENTER},
 };
 
+#if 0
 static uint8_t const matrixFn[8][12][3] =
 {
     {{KEY_INSERT}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_MUTE}, {KEY_VOLUME_DOWN}, {KEY_PAUSE}},
@@ -89,13 +90,24 @@ static uint8_t const matrixFn[8][12][3] =
     {{KEY_LEFTCONTROL, KEY_Z}, {KEY_LEFTCONTROL, KEY_X}, {KEY_LEFTCONTROL, KEY_C}, {KEY_LEFTCONTROL, KEY_V}, {KEY_LANG2}, {KEY_TAB}, {KEY_ENTER}, {KEY_LANG1}, {KEY_LEFTSHIFT, KEY_LEFTARROW}, {KEY_LEFTSHIFT, KEY_DOWNARROW}, {KEY_LEFTSHIFT, KEY_RIGHTARROW}, {KEY_LEFTSHIFT, KEY_END}},
     {{0}, {0}, {0}, {0}, {KEY_LEFTCONTROL, KEY_BACKSPACE}, {0}, {0}, {KEY_LEFTCONTROL, KEY_SPACEBAR}, {0}, {0}, {0}, {0}}
 };
-
 static uint8_t const matrixFn109[4][3] =
 {
     {KEY_INTERNATIONAL5},   // no-convert
     {KEY_INTERNATIONAL4},   // convert
     {KEY_INTERNATIONAL2},   // hiragana
     {KEY_GRAVE_ACCENT}      // zenkaku
+};
+#endif
+static uint8_t const matrixFn[8][12][3] =
+{
+    {{KEY_PRINTSCREEN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_MUTE}, {KEY_VOLUME_DOWN}, {KEY_PAUSE}},
+    {{KEY_GRAVE_ACCENT}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_VOLUME_UP}, {KEY_BACKSLASH}},
+    {{KEY_SCROLL_LOCK}, {KEY_LEFTALT, KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_LEFTALT, KEY_0}, {KEYPAD_NUM_LOCK}},
+    {{KEY_CAPS_LOCK}, {KEY_LEFTALT, KEY_2}, {KEY_LEFTALT, KEY_3}, {KEY_LEFTALT, KEY_4}, {KEY_LEFTALT, KEY_5}, {0}, {0}, {KEY_LEFTALT, KEY_6}, {KEY_LEFTALT, KEY_7}, {KEY_LEFTALT, KEY_8}, {KEY_LEFTALT, KEY_9}, {KEY_QUOTE}},
+    {{KEY_INTERNATIONAL2}, {KEY_INTERNATIONAL4}, {KEY_PAGEUP}, {KEY_INTERNATIONAL5}, {KEY_INTERNATIONAL6}, {0}, {0}, {KEY_LANG3}, {KEY_NON_US_BACKSLASH}, {KEY_UPARROW}, {KEYPAD_EQUAL}, {KEYPAD_COMMA}},
+    {{KEY_INTERNATIONAL1}, {KEY_INSERT}, {KEY_PAGEDOWN}, {KEY_DELETE}, {KEY_INTERNATIONAL3}, {KEY_ESCAPE}, {KEY_APPLICATION}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
+    {{KEY_F15}, {KEY_F16}, {KEY_F17}, {KEY_F18}, {KEY_F19}, {KEY_TAB}, {KEY_ENTER}, {KEY_F20}, {KEY_F21}, {KEY_F22}, {KEY_F23}, {KEY_F24}},
+    {{0}, {0}, {0}, {0}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {0}, {0}, {0}, {0}}
 };
 
 static uint8_t const matrixNumLock[8][5] =
@@ -459,10 +471,12 @@ static void about(void)
 
 static const uint8_t* getKeyFn(uint8_t code)
 {
+#if 0
     if (is109()) {
         if (12 * 6 + 8 <= code && code <= 12 * 6 + 11)
             return matrixFn109[code - (12 * 6 + 8)];
     }
+#endif
     return matrixFn[code / 12][code % 12];
 }
 
@@ -552,6 +566,18 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
                 case KEY_RIGHTSHIFT:
                     modifiers |= MOD_RIGHTSHIFT;
                     break;
+                case KEY_LEFTALT:
+                    modifiers |= MOD_LEFTALT;
+                    break;
+                case KEY_RIGHTALT:
+                    modifiers |= MOD_RIGHTALT;
+                    break;
+                case KEY_LEFT_GUI:
+                    modifiers |= MOD_LEFTGUI;
+                    break;
+                case KEY_RIGHT_GUI:
+                    modifiers |= MOD_RIGHTGUI;
+                    break;
 #ifdef NRF51
                 case KEY_ESCAPE:
                     if (make) {
@@ -610,20 +636,24 @@ static void processOSMode(uint8_t* report)
             case KEY_LANG2:
                 report[i] = KEY_F14;
                 break;
+#if 0
             case KEY_INTERNATIONAL4:
             case KEY_INTERNATIONAL5:
                 report[i] = KEY_SPACEBAR;
                 break;
+#endif
             default:
                 break;
             }
             break;
         case OS_MAC:
             switch (report[i]) {
+#if 0
             case KEY_INTERNATIONAL4:
             case KEY_INTERNATIONAL5:
                 report[i] = KEY_SPACEBAR;
                 break;
+#endif
             case KEY_APPLICATION:
                 if (isMacMod()) {
                     report[0] |= MOD_LEFTALT;
@@ -646,10 +676,12 @@ static void processOSMode(uint8_t* report)
                 report[i] = KEY_BACKSPACE;
                 report[0] |= MOD_LEFTSHIFT | MOD_LEFTCONTROL;
                 break;
+#if 0
             case KEY_INTERNATIONAL4:
             case KEY_INTERNATIONAL5:
                 report[i] = KEY_SPACEBAR;
                 break;
+#endif
             default:
                 break;
             }
@@ -661,10 +693,12 @@ static void processOSMode(uint8_t* report)
                 report[i] = KEY_GRAVE_ACCENT;
                 report[0] |= MOD_LEFTALT;
                 break;
+#if 0
             case KEY_INTERNATIONAL4:
             case KEY_INTERNATIONAL5:
                 report[i] = KEY_SPACEBAR;
                 break;
+#endif
             default:
                 break;
             }
