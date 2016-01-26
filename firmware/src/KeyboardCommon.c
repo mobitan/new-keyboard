@@ -278,7 +278,7 @@ void onPressed(int8_t row, uint8_t column)
         modifiers |= 1u << (key - KEY_LEFTCONTROL);
         return;
     }
-    if (KEY_FN == key) {
+    if (KEY_LEFTFN == key || KEY_RIGHTFN == key) {
         current[1] |= MOD_FN;
         return;
     }

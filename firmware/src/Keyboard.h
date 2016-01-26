@@ -506,7 +506,8 @@ void initKeyboard(void);
 void initKeyboardBase(void);
 void initKeyboardKana(void);
 
-#define KEY_FN          0xF0
+#define KEY_LEFTFN      0xF0
+#define KEY_RIGHTFN     0xF1
 #define KEY_DAKUTEN     0xF3
 #define KEY_HANDAKU     0xF4
 
