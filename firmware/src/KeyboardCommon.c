@@ -98,6 +98,7 @@ static uint8_t const matrixFn109[4][3] =
     {KEY_GRAVE_ACCENT}      // zenkaku
 };
 #endif
+#if 0
 static uint8_t const matrixFn[8][12][3] =
 {
     {{KEY_PRINTSCREEN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_MUTE}, {KEY_VOLUME_DOWN}, {KEY_PAUSE}},
@@ -107,7 +108,19 @@ static uint8_t const matrixFn[8][12][3] =
     {{KEY_INTERNATIONAL2}, {KEY_INTERNATIONAL4}, {KEY_PAGEUP}, {KEY_INTERNATIONAL5}, {KEY_INTERNATIONAL6}, {0}, {0}, {KEY_LANG3}, {KEY_NON_US_BACKSLASH}, {KEY_UPARROW}, {KEYPAD_EQUAL}, {KEYPAD_COMMA}},
     {{KEY_INTERNATIONAL1}, {KEY_INSERT}, {KEY_PAGEDOWN}, {KEY_DELETE}, {KEY_INTERNATIONAL3}, {KEY_ESCAPE}, {KEY_APPLICATION}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
     {{KEY_F15}, {KEY_F16}, {KEY_F17}, {KEY_F18}, {KEY_F19}, {KEY_TAB}, {KEY_ENTER}, {KEY_F20}, {KEY_F21}, {KEY_F22}, {KEY_F23}, {KEY_F24}},
-    {{0}, {0}, {0}, {0}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {0}, {0}, {0}, {0}}
+    {{0}, {0}, {0}, {KEY_F14}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {KEY_F13}, {0}, {0}, {0}}
+};
+#endif
+static uint8_t const matrixFn[8][12][3] =
+{
+    {{KEY_RIGHT_BRACKET}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_EQUAL}},
+    {{KEY_INTERNATIONAL3}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_F12}, {KEY_LEFT_BRACKET}},
+    {{KEY_NON_US_HASH}, {KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_0}, {KEY_MINUS}},
+    {{KEY_CAPS_LOCK}, {KEY_2}, {KEY_3}, {KEY_4}, {KEY_5}, {0}, {0}, {KEY_6}, {KEY_7}, {KEY_8}, {KEY_9}, {KEY_QUOTE}},
+    {{KEY_Q}, {KEY_W}, {KEY_E}, {KEY_R}, {KEY_T}, {0}, {0}, {KEY_Y}, {KEY_U}, {KEY_I}, {KEY_O}, {KEY_P}},
+    {{KEY_A}, {KEY_S}, {KEY_D}, {KEY_F}, {KEY_G}, {KEY_ESCAPE}, {KEY_APPLICATION}, {KEY_H}, {KEY_J}, {KEY_K}, {KEY_L}, {KEY_SEMICOLON}},
+    {{KEY_Z}, {KEY_X}, {KEY_C}, {KEY_V}, {KEY_B}, {KEY_TAB}, {KEY_ENTER}, {KEY_N}, {KEY_M}, {KEY_COMMA}, {KEY_PERIOD}, {KEY_SLASH}},
+    {{0}, {0}, {0}, {KEY_F14}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {KEY_F13}, {0}, {0}, {0}}
 };
 
 static uint8_t const matrixNumLock[8][5] =
@@ -280,7 +293,9 @@ void onPressed(int8_t row, uint8_t column)
     }
     if (KEY_LEFTFN == key || KEY_RIGHTFN == key) {
         current[1] |= MOD_FN;
+#if 0
         return;
+#endif
     }
     if (count < 8)
         current[count++] = code;
