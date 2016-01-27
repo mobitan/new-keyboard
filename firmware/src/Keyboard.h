@@ -1,5 +1,6 @@
 /*
  * Copyright 2013-2015 Esrille Inc.
+ * Modified by mobitan, 2016.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -446,8 +447,8 @@
 #define ROMA_DAKUTEN	202
 #define ROMA_HANDAKU	203
 #define ROMA_QUESTION	204
-#define ROMA_TOUTEN	205     // 、
-#define ROMA_KUTEN	206     // 。
+#define ROMA_TOUTEN	205     // 縲�
+#define ROMA_KUTEN	206     // 縲�
 #define ROMA_LAB	207	// <
 #define ROMA_RAB	208	// >
 
@@ -475,18 +476,18 @@
 #define ROMA_BANG       225     // !
 
 // Non-common (US, JP, IME)
-#define ROMA_LCB        230     // 「
-#define ROMA_RCB        231     // 」
-#define ROMA_LWCB       232     // 『
-#define ROMA_RWCB       233     // 』
+#define ROMA_LCB        230     // 縲�
+#define ROMA_RCB        231     // 縲�
+#define ROMA_LWCB       232     // 縲�
+#define ROMA_RWCB       233     // 縲�
 #define ROMA_LSB        234     // [
 #define ROMA_RSB        235     // ]
-#define ROMA_NAKAGURO   236     // ・
-#define ROMA_SLASH      237     // ／
-#define ROMA_SANTEN     238     // …
-#define ROMA_COMMA      239     // ，
-#define ROMA_PERIOD     240     // ．
-#define ROMA_NAMI       241     // 〜
+#define ROMA_NAKAGURO   236     // 繝ｻ
+#define ROMA_SLASH      237     // �ｼ�
+#define ROMA_SANTEN     238     // 窶ｦ
+#define ROMA_COMMA      239     // �ｼ�
+#define ROMA_PERIOD     240     // �ｼ�
+#define ROMA_NAMI       241     // 縲�
 
 //
 //
