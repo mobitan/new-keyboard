@@ -102,7 +102,7 @@ static uint8_t const matrixFn109[4][3] =
 #if 1
 static uint8_t const matrixFn[8][12][3] =
 {
-    {{KEY_ESCAPE}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_PAUSE}},
+    {{KEY_PRINTSCREEN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_PAUSE}},
     {{0}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_F12}, {0}},
     {{KEY_PAGEUP}, {KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_0}, {KEY_LEFT_BRACKET}},
     {{KEY_PAGEDOWN}, {KEY_2}, {KEY_3}, {KEY_4}, {KEY_5}, {0}, {0}, {KEY_6}, {KEY_7}, {KEY_8}, {KEY_9}, {KEY_QUOTE}},
@@ -110,19 +110,6 @@ static uint8_t const matrixFn[8][12][3] =
     {{KEY_A}, {KEY_S}, {KEY_D}, {KEY_F}, {KEY_G}, {KEY_MINUS}, {KEY_EQUAL}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
     {{KEY_Z}, {KEY_X}, {KEY_C}, {KEY_V}, {KEY_B}, {KEY_SCROLL_LOCK}, {KEYPAD_NUM_LOCK}, {KEY_N}, {KEY_M}, {KEY_COMMA}, {KEY_PERIOD}, {KEY_SLASH}},
     {{0}, {0}, {0}, {KEY_F14}, {KEY_SPACEBAR}, {KEY_BACKSPACE}, {KEY_ENTER}, {KEY_INTERNATIONAL4}, {KEY_F13}, {0}, {KEY_INSERT}, {0}}
-};
-#endif
-#if 0
-static uint8_t const matrixFn[8][12][3] =
-{
-    {{KEY_RIGHT_BRACKET}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_EQUAL}},
-    {{KEY_INTERNATIONAL3}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_F12}, {KEY_LEFT_BRACKET}},
-    {{KEY_NON_US_HASH}, {KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_0}, {KEY_MINUS}},
-    {{KEY_CAPS_LOCK}, {KEY_2}, {KEY_3}, {KEY_4}, {KEY_5}, {0}, {0}, {KEY_6}, {KEY_7}, {KEY_8}, {KEY_9}, {KEY_QUOTE}},
-    {{KEY_Q}, {KEY_W}, {KEY_E}, {KEY_R}, {KEY_T}, {0}, {0}, {KEY_Y}, {KEY_U}, {KEY_I}, {KEY_O}, {KEY_P}},
-    {{KEY_A}, {KEY_S}, {KEY_D}, {KEY_F}, {KEY_G}, {KEY_ESCAPE}, {KEY_APPLICATION}, {KEY_H}, {KEY_J}, {KEY_K}, {KEY_L}, {KEY_SEMICOLON}},
-    {{KEY_Z}, {KEY_X}, {KEY_C}, {KEY_V}, {KEY_B}, {KEY_TAB}, {KEY_ENTER}, {KEY_N}, {KEY_M}, {KEY_COMMA}, {KEY_PERIOD}, {KEY_SLASH}},
-    {{0}, {0}, {0}, {KEY_F14}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {KEY_F13}, {0}, {0}, {0}}
 };
 #endif
 
