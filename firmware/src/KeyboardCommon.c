@@ -99,19 +99,20 @@ static uint8_t const matrixFn109[4][3] =
     {KEY_GRAVE_ACCENT}      // zenkaku
 };
 #endif
-#if 0
+#if 1
 static uint8_t const matrixFn[8][12][3] =
 {
-    {{KEY_PRINTSCREEN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_MUTE}, {KEY_VOLUME_DOWN}, {KEY_PAUSE}},
-    {{KEY_GRAVE_ACCENT}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_VOLUME_UP}, {KEY_BACKSLASH}},
-    {{KEY_SCROLL_LOCK}, {KEY_LEFTALT, KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_LEFTALT, KEY_0}, {KEYPAD_NUM_LOCK}},
-    {{KEY_CAPS_LOCK}, {KEY_LEFTALT, KEY_2}, {KEY_LEFTALT, KEY_3}, {KEY_LEFTALT, KEY_4}, {KEY_LEFTALT, KEY_5}, {0}, {0}, {KEY_LEFTALT, KEY_6}, {KEY_LEFTALT, KEY_7}, {KEY_LEFTALT, KEY_8}, {KEY_LEFTALT, KEY_9}, {KEY_QUOTE}},
-    {{KEY_INTERNATIONAL2}, {KEY_INTERNATIONAL4}, {KEY_PAGEUP}, {KEY_INTERNATIONAL5}, {KEY_INTERNATIONAL6}, {0}, {0}, {KEY_LANG3}, {KEY_NON_US_BACKSLASH}, {KEY_UPARROW}, {KEYPAD_EQUAL}, {KEYPAD_COMMA}},
-    {{KEY_INTERNATIONAL1}, {KEY_INSERT}, {KEY_PAGEDOWN}, {KEY_DELETE}, {KEY_INTERNATIONAL3}, {KEY_ESCAPE}, {KEY_APPLICATION}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
-    {{KEY_F15}, {KEY_F16}, {KEY_F17}, {KEY_F18}, {KEY_F19}, {KEY_TAB}, {KEY_ENTER}, {KEY_F20}, {KEY_F21}, {KEY_F22}, {KEY_F23}, {KEY_F24}},
-    {{0}, {0}, {0}, {KEY_F14}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {KEY_F13}, {0}, {0}, {0}}
+    {{KEY_ESCAPE}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_PAUSE}},
+    {{0}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_F12}, {0}},
+    {{KEY_PAGEUP}, {KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_0}, {KEY_LEFT_BRACKET}},
+    {{KEY_PAGEDOWN}, {KEY_2}, {KEY_3}, {KEY_4}, {KEY_5}, {0}, {0}, {KEY_6}, {KEY_7}, {KEY_8}, {KEY_9}, {KEY_QUOTE}},
+    {{KEY_Q}, {KEY_W}, {KEY_E}, {KEY_R}, {KEY_T}, {0}, {0}, {KEY_Y}, {KEY_U}, {KEY_UPARROW}, {KEY_O}, {KEY_P}},
+    {{KEY_A}, {KEY_S}, {KEY_D}, {KEY_F}, {KEY_G}, {KEY_MINUS}, {KEY_EQUAL}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
+    {{KEY_Z}, {KEY_X}, {KEY_C}, {KEY_V}, {KEY_B}, {KEY_SCROLL_LOCK}, {KEYPAD_NUM_LOCK}, {KEY_N}, {KEY_M}, {KEY_COMMA}, {KEY_PERIOD}, {KEY_SLASH}},
+    {{0}, {0}, {0}, {KEY_F14}, {KEY_SPACEBAR}, {KEY_BACKSPACE}, {KEY_ENTER}, {KEY_INTERNATIONAL4}, {KEY_F13}, {0}, {KEY_INSERT}, {0}}
 };
 #endif
+#if 0
 static uint8_t const matrixFn[8][12][3] =
 {
     {{KEY_RIGHT_BRACKET}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_EQUAL}},
@@ -123,6 +124,7 @@ static uint8_t const matrixFn[8][12][3] =
     {{KEY_Z}, {KEY_X}, {KEY_C}, {KEY_V}, {KEY_B}, {KEY_TAB}, {KEY_ENTER}, {KEY_N}, {KEY_M}, {KEY_COMMA}, {KEY_PERIOD}, {KEY_SLASH}},
     {{0}, {0}, {0}, {KEY_F14}, {KEY_BACKSPACE}, {0}, {0}, {KEY_SPACEBAR}, {KEY_F13}, {0}, {0}, {0}}
 };
+#endif
 
 static uint8_t const matrixNumLock[8][5] =
 {
@@ -394,6 +396,7 @@ static const uint8_t about2[] = {
     KEY_V, KEY_E, KEY_R, KEY_PERIOD, KEY_SPACEBAR, 0
 };
 static const uint8_t about3[] = {
+    KEY_MINUS, KEY_M, KEY_O, KEY_B, KEY_I, KEY_T, KEY_A, KEY_N, KEY_ENTER,
     KEY_C, KEY_O, KEY_P, KEY_Y, KEY_R, KEY_I, KEY_G, KEY_H, KEY_T, KEY_SPACEBAR, KEY_2, KEY_0, KEY_1, KEY_3, KEY_MINUS, KEY_2, KEY_0, KEY_1, KEY_5, KEY_SPACEBAR,
     KEY_E, KEY_S, KEY_R, KEY_I, KEY_L, KEY_L, KEY_E, KEY_SPACEBAR, KEY_I, KEY_N, KEY_C, KEY_PERIOD, KEY_ENTER,
     KEY_F, KEY_2, KEY_SPACEBAR, 0
@@ -433,8 +436,10 @@ static void about(void)
     emitKey(KEY_PERIOD);
     emitKey(getNumKeycode((APP_VERSION_VALUE >> 4) & 0xf));
     emitKey(getNumKeycode(APP_VERSION_VALUE & 0xf));
+#if 0
     emitKey(KEY_ENTER);
-
+#endif
+    
     // F2 OS
     emitString(about3);
     emitOSName();
