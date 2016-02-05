@@ -109,7 +109,7 @@ static uint8_t const matrixFn[8][12][3] =
     {{KEY_Q}, {KEY_W}, {KEY_E}, {KEY_R}, {KEY_T}, {0}, {0}, {KEY_Y}, {KEY_U}, {KEY_UPARROW}, {KEY_O}, {KEY_P}},
     {{KEY_A}, {KEY_S}, {KEY_D}, {KEY_F}, {KEY_G}, {KEY_MINUS}, {KEY_EQUAL}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
     {{KEY_Z}, {KEY_X}, {KEY_C}, {KEY_V}, {KEY_B}, {KEY_SCROLL_LOCK}, {KEYPAD_NUM_LOCK}, {KEY_N}, {KEY_M}, {KEY_COMMA}, {KEY_PERIOD}, {KEY_SLASH}},
-    {{0}, {0}, {0}, {KEY_F14}, {KEY_SPACEBAR}, {KEY_BACKSPACE}, {KEY_ENTER}, {KEY_INTERNATIONAL4}, {KEY_F13}, {0}, {KEY_INSERT}, {0}}
+    {{0}, {0}, {0}, {KEY_SPACEBAR}, {KEY_F14}, {KEY_BACKSPACE}, {KEY_ENTER}, {KEY_F13}, {KEY_INTERNATIONAL4}, {0}, {0}, {0}}
 };
 #endif
 
@@ -122,7 +122,7 @@ static uint8_t const matrixNumLock[8][5] =
     0, KEYPAD_7, KEYPAD_8, KEYPAD_9, KEYPAD_SUBTRACT,
     0, KEYPAD_4, KEYPAD_5, KEYPAD_6, KEYPAD_ADD,
     0, KEYPAD_1, KEYPAD_2, KEYPAD_3, KEY_ENTER,
-    0, 0, KEYPAD_0, KEYPAD_DOT, 0,
+    0, KEYPAD_0, 0, KEYPAD_DOT, 0,
 };
 
 #define MAX_DELAY_KEY_NAME  4
