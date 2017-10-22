@@ -22,6 +22,8 @@
 #include <string.h>
 #include <system.h>
 
+#define ENABLE_SWITCHING
+
 NVRAM_DATA(BASE_QWERTY, KANA_ROMAJI, OS_PC, DELAY_12, MOD_DEFAULT, LED_DEFAULT, IME_MS, PAD_SENSE_1);
 
 uint8_t os;
@@ -72,7 +74,7 @@ static uint8_t const modKeys[MOD_MAX + 1][MAX_MOD_KEY_NAME] =
 
 static uint8_t const matrixFn[8][12][3] =
 {
-    {{KEY_PRINTSCREEN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_PAUSE}},
+    {{KEY_PRINTSCREEN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_F10}, {KEY_F11}, {KEY_LEFTCONTROL, KEY_PAUSE}},
     {{0}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_F12}, {0}},
     {{KEY_PAGEUP}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_F10}, {KEY_LEFTSHIFT, KEY_TAB}},
 #ifdef WITH_HOS
@@ -80,10 +82,10 @@ static uint8_t const matrixFn[8][12][3] =
 #else
     {{KEY_PAGEDOWN}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {0}, {0}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_TAB}},
 #endif
-    {{KEY_Q}, {KEY_F15}, {KEY_F16}, {KEY_F17}, {KEYPAD_NUM_LOCK}, {0}, {0}, {KEY_LEFTCONTROL, KEY_HOME}, {KEY_LEFTCONTROL, KEY_LEFTARROW}, {KEY_UPARROW}, {KEY_LEFTCONTROL, KEY_RIGHTARROW}, {KEY_APPLICATION}},
+    {{KEYPAD_NUM_LOCK}, {KEY_INTERNATIONAL2}, {KEY_INTERNATIONAL4}, {KEY_INTERNATIONAL5}, {KEY_LEFTSHIFT, KEY_CAPS_LOCK}, {0}, {0}, {KEY_LEFTCONTROL, KEY_HOME}, {KEY_LEFTCONTROL, KEY_LEFTARROW}, {KEY_UPARROW}, {KEY_LEFTCONTROL, KEY_RIGHTARROW}, {KEY_APPLICATION}},
     {{KEY_ESCAPE}, {KEY_BACKSPACE}, {KEY_ENTER}, {KEY_DELETE}, {KEY_LEFTCONTROL, KEY_Z}, {KEY_F11}, {KEY_F12}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
-    {{KEY_LEFTSHIFT, KEY_CAPS_LOCK}, {KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_TAB}, {KEY_LEFTCONTROL, KEY_TAB}, {KEY_LEFTCONTROL, KEY_F4}, {KEY_B}, {KEY_TAB}, {KEY_ENTER}, {KEY_LEFTCONTROL, KEY_X}, {KEY_LEFTCONTROL, KEY_C}, {KEY_LEFTCONTROL, KEY_A}, {KEY_LEFTCONTROL, KEY_V}, {KEY_LEFTCONTROL, KEY_END}},
-    {{0}, {0}, {0}, {KEY_SPACEBAR}, {0}, {0}, {0}, {0}, {KEY_INTERNATIONAL4}, {0}, {0}, {0}}
+    {{KEY_GRAVE_ACCENT}, {KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_TAB}, {KEY_LEFTCONTROL, KEY_TAB}, {KEY_LEFTCONTROL, KEY_W}, {KEY_LEFTALT, KEY_ESCAPE}, {KEY_TAB}, {KEY_ENTER}, {KEY_LEFTCONTROL, KEY_X}, {KEY_LEFTCONTROL, KEY_C}, {KEY_LEFTCONTROL, KEY_A}, {KEY_LEFTCONTROL, KEY_V}, {KEY_LEFTCONTROL, KEY_END}},
+    {{0}, {0}, {0}, {KEY_SPACEBAR}, {0}, {0}, {0}, {0}, {KEY_INTERNATIONAL1}, {KEY_BACKSPACE}, {}, {0}}
 };
 
 static uint8_t const matrixNumLock[8][5] =
@@ -565,6 +567,7 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
                 switch (key) {
                 case 0:
                     break;
+#ifdef ENABLE_SWITCHING
                 case KEY_F1:
                     if (make) {
 #ifdef WITH_HOS
@@ -659,6 +662,7 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
                         xmit = XMIT_MACRO;
                     }
                     break;
+#endif
                 case KEY_LEFTCONTROL:
                     modifiers |= MOD_LEFTCONTROL;
                     break;
