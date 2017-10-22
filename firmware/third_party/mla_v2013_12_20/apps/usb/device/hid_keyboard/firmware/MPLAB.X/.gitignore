@@ -1,0 +1,7 @@
+build/
+debug/
+dist/
+nbproject/private/
+nbproject/*.bash
+nbproject/*.mk
+nbproject/*.properties

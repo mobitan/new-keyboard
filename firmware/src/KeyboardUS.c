@@ -1,5 +1,6 @@
 /*
  * Copyright 2013-2016 Esrille Inc.
+ * Modified by mobitan, 2016-2017.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +20,11 @@
 #include <string.h>
 #include <system.h>
 
+// #define ENABLE_DVORAK
+// #define ENABLE_COLEMAK
+// #define ENABLE_JIS
+// #define ENABLE_NICOLA_F
+
 static uint8_t const baseKeys[BASE_MAX + 1][5] =
 {
     {KEY_U, KEY_S, KEY_ENTER},
@@ -30,16 +36,17 @@ static uint8_t const baseKeys[BASE_MAX + 1][5] =
 
 static uint8_t const matrixQwerty[8][12] =
 {
-    KEY_LEFT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_EQUAL,
-    KEY_GRAVE_ACCENT, KEY_F1, 0, 0, 0, 0, 0, 0, 0, 0, KEY_F12, KEY_BACKSLASH,
-    KEY_RIGHT_BRACKET, KEY_1, 0, 0, 0, 0, 0, 0, 0, 0, KEY_0, KEY_MINUS,
-    KEY_CAPS_LOCK, KEY_2, KEY_3, KEY_4, KEY_5, 0, 0, KEY_6, KEY_7, KEY_8, KEY_9, KEY_QUOTE,
+    KEY_ESCAPE, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_PAUSE,
+    KEY_LEFT_GUI, KEY_F1, 0, 0, 0, 0, 0, 0, 0, 0, KEY_F12, KEY_RIGHT_GUI,
+    KEY_RIGHT_BRACKET, KEY_1, 0, 0, 0, 0, 0, 0, 0, 0, KEY_0, KEY_LEFT_BRACKET,
+    KEY_NON_US_HASH, KEY_2, KEY_3, KEY_4, KEY_5, 0, 0, KEY_6, KEY_7, KEY_8, KEY_9, KEY_QUOTE,
     KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, 0, 0, KEY_Y, KEY_U, KEY_I, KEY_O, KEY_P,
-    KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_ESCAPE, KEY_APPLICATION, KEY_H, KEY_J, KEY_K, KEY_L, KEY_SEMICOLON,
+    KEY_A, KEY_S, KEY_D, KEY_F, KEY_G, KEY_MINUS, KEY_EQUAL, KEY_H, KEY_J, KEY_K, KEY_L, KEY_SEMICOLON,
     KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_TAB, KEY_ENTER, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,
-    KEY_LEFTCONTROL, KEY_LEFT_GUI, KEY_LEFT_FN, KEY_LEFTSHIFT, KEY_BACKSPACE, KEY_LEFTALT, KEY_RIGHTALT, KEY_SPACEBAR, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_RIGHT_GUI, KEY_RIGHTCONTROL
+    KEY_LEFTCONTROL, KEY_GRAVE_ACCENT, KEY_LEFTALT, KEY_SPACEBAR, KEY_LEFT_FN, KEY_LEFTSHIFT, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_INTERNATIONAL4, KEY_BACKSPACE, KEY_DELETE, KEY_RIGHTCONTROL
 };
 
+#ifdef ENABLE_DVORAK
 static uint8_t const matrixDvorak[8][12] =
 {
     KEY_LEFT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_BACKSLASH,
@@ -51,7 +58,9 @@ static uint8_t const matrixDvorak[8][12] =
     KEY_SEMICOLON, KEY_Q, KEY_J, KEY_K, KEY_X, KEY_TAB, KEY_ENTER, KEY_B, KEY_M, KEY_W, KEY_V, KEY_Z,
     KEY_LEFTCONTROL, KEY_LEFT_GUI, KEY_LEFT_FN, KEY_LEFTSHIFT, KEY_BACKSPACE, KEY_LEFTALT, KEY_RIGHTALT, KEY_SPACEBAR, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_RIGHT_GUI, KEY_RIGHTCONTROL
 };
+#endif
 
+#ifdef ENABLE_COLEMAK
 static uint8_t const matrixColemak[8][12] =
 {
     KEY_LEFT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_EQUAL,
@@ -63,6 +72,7 @@ static uint8_t const matrixColemak[8][12] =
     KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_TAB, KEY_ENTER, KEY_K, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,
     KEY_LEFTCONTROL, KEY_LEFT_GUI, KEY_LEFT_FN, KEY_LEFTSHIFT, KEY_SPACEBAR, KEY_LEFTALT, KEY_RIGHTALT, KEY_SPACEBAR, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_RIGHT_GUI, KEY_RIGHTCONTROL
 };
+#endif
 
 //
 // Japanese layouts
@@ -81,6 +91,7 @@ static uint8_t const matrixColemak[8][12] =
 // zenkaku      KEY_GRAVE_ACCENT
 //
 
+#ifdef ENABLE_JIS
 static uint8_t const matrixJIS[8][12] =
 {
     KEY_RIGHT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_EQUAL,
@@ -92,7 +103,9 @@ static uint8_t const matrixJIS[8][12] =
     KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_TAB, KEY_ENTER, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,
     KEY_LEFTCONTROL, KEY_LEFT_GUI, KEY_LEFT_FN, KEY_LEFTSHIFT, KEY_BACKSPACE, KEY_LEFTALT, KEY_RIGHTALT, KEY_SPACEBAR, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_RIGHT_GUI, KEY_RIGHTCONTROL
 };
+#endif
 
+#ifdef ENABLE_NICOLA_F
 static uint8_t const matrixNicolaF[8][12] =
 {
     KEY_RIGHT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_MINUS,
@@ -104,6 +117,7 @@ static uint8_t const matrixNicolaF[8][12] =
     KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_TAB, KEY_ENTER, KEY_N, KEY_M, KEY_COMMA, KEY_PERIOD, KEY_SLASH,
     KEY_LEFTCONTROL, KEY_LEFT_GUI, KEY_LEFT_FN, KEY_LEFTSHIFT, KEYPAD_ENTER, KEY_LEFTALT, KEY_RIGHTALT, KEY_SPACEBAR, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_RIGHT_GUI, KEY_RIGHTCONTROL
 };
+#endif
 
 static uint8_t mode;
 
@@ -167,18 +181,26 @@ uint8_t getKeyBase(uint8_t code)
     case BASE_QWERTY:
         key = matrixQwerty[row][column];
         break;
+#ifdef ENABLE_DVORAK
     case BASE_DVORAK:
         key = matrixDvorak[row][column];
         break;
+#endif
+#ifdef ENABLE_COLEMAK
     case BASE_COLEMAK:
         key = matrixColemak[row][column];
         break;
+#endif
+#ifdef ENABLE_JIS
     case BASE_JIS:
         key = matrixJIS[row][column];
         break;
+#endif
+#ifdef ENABLE_NICOLA_F
     case BASE_NICOLA_F:
         key = matrixNicolaF[row][column];
         break;
+#endif
     default:
         key = matrixQwerty[row][column];
         break;

@@ -1,5 +1,6 @@
 /*
  * Copyright 2013-2016 Esrille Inc.
+ * Modified by mobitan, 2016-2017.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,8 @@
 
 #define MAX_KANA_KEY_NAME    6
 
-#define ENABLE_MTYPE
-#define ENABLE_STICKNEY
+// #define ENABLE_MTYPE
+// #define ENABLE_STICKNEY
 
 static uint8_t const kanaKeys[KANA_MAX + 1][MAX_KANA_KEY_NAME] =
 {
