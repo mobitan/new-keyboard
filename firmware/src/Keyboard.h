@@ -490,18 +490,18 @@
 #define ROMA_BANG       225     // !
 
 // Non-common (US, JP, IME)
-#define ROMA_LCB        230     // 縲�
-#define ROMA_RCB        231     // 縲�
-#define ROMA_LWCB       232     // 縲�
-#define ROMA_RWCB       233     // 縲�
+#define ROMA_LCB        230     // 「
+#define ROMA_RCB        231     // 」
+#define ROMA_LWCB       232     // 『
+#define ROMA_RWCB       233     // 』
 #define ROMA_LSB        234     // [
 #define ROMA_RSB        235     // ]
-#define ROMA_NAKAGURO   236     // 繝ｻ
-#define ROMA_SLASH      237     // �ｼ�
-#define ROMA_SANTEN     238     // 窶ｦ
-#define ROMA_COMMA      239     // �ｼ�
-#define ROMA_PERIOD     240     // �ｼ�
-#define ROMA_NAMI       241     // 縲�
+#define ROMA_NAKAGURO   236     // ・
+#define ROMA_SLASH      237     // ／
+#define ROMA_SANTEN     238     // …
+#define ROMA_COMMA      239     // ，
+#define ROMA_PERIOD     240     // ．
+#define ROMA_NAMI       241     // 〜
 
 //
 //

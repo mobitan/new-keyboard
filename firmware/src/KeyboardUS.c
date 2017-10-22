@@ -28,7 +28,6 @@ static uint8_t const baseKeys[BASE_MAX + 1][5] =
     {KEY_J, KEY_P, KEY_MINUS, KEY_N, KEY_ENTER},
 };
 
-#if 0
 static uint8_t const matrixQwerty[8][12] =
 {
     KEY_LEFT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_EQUAL,

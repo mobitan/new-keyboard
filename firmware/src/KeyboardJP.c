@@ -663,12 +663,10 @@ uint8_t toggleKanaMode(uint8_t key, uint8_t mod, int8_t make)
         if (make && isJP())
             eisuu_mode ^= 1;
         break;
-#if 0
     case KEY_0:
         if ((mod & MOD_SHIFT) && isJP())
             key = KEY_INTERNATIONAL1;
         break;
-#endif
     default:
         break;
     }
