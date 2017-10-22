@@ -1,7 +1,6 @@
 /*
- * Copyright 2013-2015 Esrille Inc.
- * Modified by mobitan, 2016.
- * 
+ * Copyright 2013-2016 Esrille Inc.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,19 +19,9 @@
 
 #include <stdint.h>
 #include <string.h>
-
-#ifdef __XC8
-#include <xc.h>
 #include <system.h>
-#include <plib/adc.h>
-#endif
 
-#ifdef NRF51
-#include <stdio.h>
-#include "nisse.h"
-#endif
-
-__EEPROM_DATA(BASE_QWERTY, KANA_ROMAJI, OS_PC, 1 /* delay */, 0 /* mod */, LED_DEFAULT, IME_MS, 0 /* mouse */);
+NVRAM_DATA(BASE_QWERTY, KANA_ROMAJI, OS_PC, DELAY_12, MOD_DEFAULT, LED_DEFAULT, IME_MS, PAD_SENSE_1);
 
 uint8_t os;
 uint8_t mod;
@@ -53,13 +42,10 @@ static uint8_t const osKeys[OS_MAX + 1][MAX_OS_KEY_NAME] =
     {KEY_S, KEY_MINUS, KEY_S, KEY_P, KEY_ENTER},
 };
 
-#define MAX_MOD             5
 #define MAX_MOD_KEY_NAME    6
 #define MAX_MOD_KEYS        7
 
-#define isMacMod()  (mod == 2 || mod == 5)
-
-static uint8_t const modMap[MAX_MOD + 1][MAX_MOD_KEYS] =
+static uint8_t const modMap[MOD_MAX + 1][MAX_MOD_KEYS] =
 {
     {KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_LEFT_GUI, KEY_LEFTALT, KEY_RIGHTALT, KEY_RIGHTSHIFT, KEY_RIGHTCONTROL },
     {KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_LEFTALT, KEY_LANG2, KEY_LANG1, KEY_RIGHTSHIFT, KEY_RIGHTCONTROL },
@@ -69,7 +55,7 @@ static uint8_t const modMap[MAX_MOD + 1][MAX_MOD_KEYS] =
     {KEY_LEFTSHIFT, KEY_LEFTCONTROL, KEY_LEFT_GUI, KEY_LANG2, KEY_LANG1, KEY_RIGHTCONTROL, KEY_RIGHTSHIFT },
 };
 
-static uint8_t const modKeys[MAX_MOD + 1][MAX_MOD_KEY_NAME] =
+static uint8_t const modKeys[MOD_MAX + 1][MAX_MOD_KEY_NAME] =
 {
     {KEY_C, KEY_ENTER},
     {KEY_C, KEY_J, KEY_ENTER},
@@ -77,6 +63,10 @@ static uint8_t const modKeys[MAX_MOD + 1][MAX_MOD_KEY_NAME] =
     {KEY_S, KEY_ENTER},
     {KEY_S, KEY_J, KEY_ENTER},
     {KEY_S, KEY_J, KEY_M, KEY_A, KEY_C, KEY_ENTER},
+#ifdef ENABLE_DUAL_ROLE_FN
+    {KEY_C, KEY_X, KEY_ENTER},
+    {KEY_S, KEY_X, KEY_ENTER},
+#endif
 };
 
 #if 0
@@ -85,7 +75,11 @@ static uint8_t const matrixFn[8][12][3] =
     {{KEY_INSERT}, {KEY_F2}, {KEY_F3}, {KEY_F4}, {KEY_F5}, {KEY_F6}, {KEY_F7}, {KEY_F8}, {KEY_F9}, {KEY_MUTE}, {KEY_VOLUME_DOWN}, {KEY_PAUSE}},
     {{KEY_LEFTCONTROL, KEY_DELETE}, {KEY_F1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_VOLUME_UP}, {KEY_SCROLL_LOCK}},
     {{KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_Z}, {KEY_LEFTCONTROL, KEY_1}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {KEY_LEFTCONTROL, KEY_0}, {KEY_PRINTSCREEN}},
+#ifdef WITH_HOS
+    {{KEY_DELETE}, {KEY_LEFTCONTROL, KEY_2}, {KEY_LEFTCONTROL, KEY_3}, {KEY_LEFTCONTROL, KEY_4}, {KEY_LEFTCONTROL, KEY_5}, {0}, {0}, {KEY_LEFTCONTROL, KEY_6}, {KEY_LEFTCONTROL, KEY_7}, {KEY_LEFTCONTROL, KEY_8}, {KEY_LEFTCONTROL, KEY_9}, {KEYPAD_NUM_LOCK}},
+#else
     {{KEY_DELETE}, {KEY_LEFTCONTROL, KEY_2}, {KEY_LEFTCONTROL, KEY_3}, {KEY_LEFTCONTROL, KEY_4}, {KEY_LEFTCONTROL, KEY_5}, {0}, {0}, {KEY_LEFTCONTROL, KEY_6}, {KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_LEFTARROW}, {KEY_LEFTSHIFT, KEY_UPARROW}, {KEY_LEFTCONTROL, KEY_LEFTSHIFT, KEY_RIGHTARROW}, {KEYPAD_NUM_LOCK}},
+#endif
     {{KEY_LEFTCONTROL, KEY_Q}, {KEY_LEFTCONTROL, KEY_W}, {KEY_PAGEUP}, {KEY_LEFTCONTROL, KEY_R}, {KEY_LEFTCONTROL, KEY_T}, {0}, {0}, {KEY_LEFTCONTROL, KEY_HOME}, {KEY_LEFTCONTROL, KEY_LEFTARROW}, {KEY_UPARROW}, {KEY_LEFTCONTROL, KEY_RIGHTARROW}, {KEY_LEFTCONTROL, KEY_END}},
     {{KEY_LEFTCONTROL, KEY_A}, {KEY_LEFTCONTROL, KEY_S}, {KEY_PAGEDOWN}, {KEY_LEFTCONTROL, KEY_F}, {KEY_LEFTCONTROL, KEY_G}, {KEY_ESCAPE}, {KEY_CAPS_LOCK}, {KEY_HOME}, {KEY_LEFTARROW}, {KEY_DOWNARROW}, {KEY_RIGHTARROW}, {KEY_END}},
     {{KEY_LEFTCONTROL, KEY_Z}, {KEY_LEFTCONTROL, KEY_X}, {KEY_LEFTCONTROL, KEY_C}, {KEY_LEFTCONTROL, KEY_V}, {KEY_LANG2}, {KEY_TAB}, {KEY_ENTER}, {KEY_LANG1}, {KEY_LEFTSHIFT, KEY_LEFTARROW}, {KEY_LEFTSHIFT, KEY_DOWNARROW}, {KEY_LEFTSHIFT, KEY_RIGHTARROW}, {KEY_LEFTSHIFT, KEY_END}},
@@ -127,7 +121,7 @@ static uint8_t const matrixNumLock[8][5] =
 
 #define MAX_DELAY_KEY_NAME  4
 
-static uint8_t const delayKeyNames[MAX_DELAY + 1][MAX_DELAY_KEY_NAME] =
+static uint8_t const delayKeyNames[DELAY_MAX + 1][MAX_DELAY_KEY_NAME] =
 {
     {KEY_D, KEY_0, KEY_ENTER},
     {KEY_D, KEY_1, KEY_2, KEY_ENTER},
@@ -166,12 +160,10 @@ static uint8_t ordered_pos = 0;
 static uint8_t ordered_max;
 
 static uint8_t currentDelay;
-static Keys keys[MAX_DELAY + 2];
+static Keys keys[DELAY_MAX + 2];
 static int8_t currentKey = 0;
 
-#ifdef __XC8
 static uint8_t tick;
-#endif
 static uint8_t processed[8];
 
 static uint8_t modifiers;
@@ -183,6 +175,11 @@ static uint8_t columnCount[12];
 
 static uint8_t led;
 
+#ifdef ENABLE_DUAL_ROLE_FN
+static uint8_t modFn;
+static uint8_t dualFn;  // Used for dual-role FN keys
+#endif
+
 void initKeyboard(void)
 {
     memset(keys, VOID_KEY, sizeof keys);
@@ -192,21 +189,25 @@ void initKeyboard(void)
     memset(processed + 2, VOID_KEY, 6);
     modifiers = modifiersPrev = 0;
     count = 2;
+    loadKeyboardSettings();
+}
 
-    os = eeprom_read(EEPROM_OS);
+void loadKeyboardSettings(void)
+{
+    os = ReadNvram(EEPROM_OS);
     if (OS_MAX < os)
         os = 0;
-    mod = eeprom_read(EEPROM_MOD);
-    if (MAX_MOD < mod)
+    mod = ReadNvram(EEPROM_MOD);
+    if (MOD_MAX < mod)
         mod = 0;
-    currentDelay = eeprom_read(EEPROM_DELAY);
-    if (MAX_DELAY < currentDelay)
+    currentDelay = ReadNvram(EEPROM_DELAY);
+    if (DELAY_MAX < currentDelay)
         currentDelay = 0;
-    prefix_shift = eeprom_read(EEPROM_PREFIX);
+    prefix_shift = ReadNvram(EEPROM_PREFIX);
     if (PREFIXSHIFT_MAX < prefix_shift)
         prefix_shift = 0;
-    initKeyboardBase();
-    initKeyboardKana();
+    loadBaseSettings();
+    loadKanaSettings();
 }
 
 void emitOSName(void)
@@ -219,7 +220,7 @@ void switchOS(void)
     ++os;
     if (OS_MAX < os)
         os = 0;
-    eeprom_write(EEPROM_OS, os);
+    WriteNvram(EEPROM_OS, os);
     emitOSName();
 }
 
@@ -231,9 +232,9 @@ void emitModName(void)
 void switchMod(void)
 {
     ++mod;
-    if (MAX_MOD < mod)
+    if (MOD_MAX < mod)
         mod = 0;
-    eeprom_write(EEPROM_MOD, mod);
+    WriteNvram(EEPROM_MOD, mod);
     emitModName();
 }
 
@@ -245,9 +246,9 @@ void emitDelayName(void)
 void switchDelay(void)
 {
     ++currentDelay;
-    if (MAX_DELAY < currentDelay)
+    if (DELAY_MAX < currentDelay)
         currentDelay = 0;
-    eeprom_write(EEPROM_DELAY, currentDelay);
+    WriteNvram(EEPROM_DELAY, currentDelay);
     emitDelayName();
 }
 
@@ -261,9 +262,11 @@ void switchPrefixShift(void)
     ++prefix_shift;
     if (PREFIXSHIFT_MAX < prefix_shift)
         prefix_shift = 0;
-    eeprom_write(EEPROM_PREFIX, prefix_shift);
+    WriteNvram(EEPROM_PREFIX, prefix_shift);
     emitPrefixShift();
 }
+
+#define CODE_A      (5*12+0)
 
 void onPressed(int8_t row, uint8_t column)
 {
@@ -281,9 +284,8 @@ void onPressed(int8_t row, uint8_t column)
         modifiers |= 1u << (key - KEY_LEFTCONTROL);
         return;
     }
-    if (KEY_LEFTFN == key || KEY_RIGHTFN == key) {
-        current[1] |= MOD_FN;
-#if 0
+    if (KEY_LEFT_FN <= key && key <= KEY_RIGHT_FN) {
+        current[1] |= 1u << (key - KEY_LEFT_FN);
         return;
 #endif
     }
@@ -321,21 +323,20 @@ uint8_t beginMacro(uint8_t max)
 
 uint8_t peekMacro(void)
 {
-    if (ordered_max <= ordered_pos)
-        return 0;
-    return ordered_keys[ordered_pos];
+    if (ordered_pos < ordered_max)
+        return ordered_keys[ordered_pos];
+    return 0;
 }
 
 uint8_t getMacro(void)
 {
-    if (ordered_max <= ordered_pos)
-        return 0;
-    uint8_t key = ordered_keys[ordered_pos++];
-    if (key == 0) {
-        ordered_pos = 0;
-        ordered_max = 0;
+    if (ordered_pos < ordered_max) {
+        uint8_t key = ordered_keys[ordered_pos++];
+        if (key)
+            return key;
     }
-    return key;
+    ordered_pos = ordered_max = 0;
+    return 0;
 }
 
 void emitKey(uint8_t c)
@@ -371,109 +372,181 @@ static uint8_t getNumKeycode(unsigned int n)
     return KEY_SPACEBAR;
 }
 
-static const uint8_t about1[] = {
-    KEY_E, KEY_S, KEY_R, KEY_I, KEY_L, KEY_L, KEY_E, KEY_SPACEBAR, KEY_N, KEY_I, KEY_S, KEY_S, KEY_E,
-#ifdef NRF51
-    KEY_SPACEBAR, KEY_B, KEY_L, KEY_E,
+#if APP_MACHINE_VALUE != 0x4550
+void emitNumber(uint16_t n)
+{
+    int8_t zero = 0;
+
+    for (uint16_t i = 10000;;) {
+        uint8_t d = n / i;
+        if (d || zero) {
+            zero = 1;
+            emitKey(getNumKeycode(d));
+        }
+        n %= i;
+        i /= 10;
+        if (i == 1)
+            zero = 1;
+        else if (i == 0)
+            break;
+    }
+}
 #endif
-    KEY_ENTER,
+
+static const uint8_t about_title[] = {
+    KEY_E, KEY_S, KEY_R, KEY_I, KEY_L, KEY_L, KEY_E, KEY_SPACEBAR, KEY_N, KEY_I, KEY_S, KEY_S, KEY_E,
+    KEY_ENTER, 0
+};
+static const uint8_t about_rev[] = {
     KEY_R, KEY_E, KEY_V, KEY_PERIOD, KEY_SPACEBAR, 0
 };
-static const uint8_t about2[] = {
+static const uint8_t about_ver[] = {
     KEY_V, KEY_E, KEY_R, KEY_PERIOD, KEY_SPACEBAR, 0
 };
-static const uint8_t about3[] = {
-    KEY_MINUS, KEY_M, KEY_O, KEY_B, KEY_I, KEY_T, KEY_A, KEY_N, KEY_ENTER,
-    KEY_C, KEY_O, KEY_P, KEY_Y, KEY_R, KEY_I, KEY_G, KEY_H, KEY_T, KEY_SPACEBAR, KEY_2, KEY_0, KEY_1, KEY_3, KEY_MINUS, KEY_2, KEY_0, KEY_1, KEY_5, KEY_SPACEBAR,
-    KEY_E, KEY_S, KEY_R, KEY_I, KEY_L, KEY_L, KEY_E, KEY_SPACEBAR, KEY_I, KEY_N, KEY_C, KEY_PERIOD, KEY_ENTER,
+static const uint8_t about_copyright[] = {
+    KEY_C, KEY_O, KEY_P, KEY_Y, KEY_R, KEY_I, KEY_G, KEY_H, KEY_T, KEY_SPACEBAR, KEY_2, KEY_0, KEY_1, KEY_3, KEY_MINUS, KEY_2, KEY_0, KEY_1, KEY_6, KEY_SPACEBAR,
+    KEY_E, KEY_S, KEY_R, KEY_I, KEY_L, KEY_L, KEY_E, KEY_SPACEBAR, KEY_I, KEY_N, KEY_C, KEY_PERIOD, KEY_ENTER, 0
+};
+static const uint8_t about_f2[] = {
     KEY_F, KEY_2, KEY_SPACEBAR, 0
 };
-static const uint8_t about4[] = {
+static const uint8_t about_f3[] = {
     KEY_F, KEY_3, KEY_SPACEBAR, 0
 };
-static const uint8_t about5[] = {
+static const uint8_t about_f4[] = {
     KEY_F, KEY_4, KEY_SPACEBAR, 0
 };
-static const uint8_t about6[] = {
+static const uint8_t about_f5[] = {
     KEY_F, KEY_5, KEY_SPACEBAR, 0
 };
-static const uint8_t about7[] = {
+static const uint8_t about_f6[] = {
     KEY_F, KEY_6, KEY_SPACEBAR, 0
 };
-static const uint8_t about8[] = {
+static const uint8_t about_f7[] = {
     KEY_F, KEY_7, KEY_SPACEBAR, 0
 };
-static const uint8_t about9[] = {
+static const uint8_t about_f8[] = {
     KEY_F, KEY_8, KEY_SPACEBAR, 0
 };
-static const uint8_t about10[] = {
+static const uint8_t about_f9[] = {
     KEY_F, KEY_9, KEY_SPACEBAR, 0
 };
 
+#ifdef WITH_HOS
+static const uint8_t about_ble[] = {
+    KEY_B, KEY_L, KEY_E, KEY_SPACEBAR, KEY_M, KEY_O, KEY_D, KEY_U, KEY_L, KEY_E,
+    KEY_ENTER, 0
+};
+
+static const uint8_t about_kvm[] = {
+    KEY_K, KEY_V, KEY_M, KEY_SPACEBAR, 0
+};
+
+static const uint8_t about_lesc[] = {
+    KEY_L, KEY_E, KEY_S, KEY_C, KEY_SPACEBAR, 0
+};
+
+#endif
+
 static void about(void)
 {
+    emitString(about_title);
+
     // REV.
-    emitString(about1);
+    emitString(about_rev);
     emitKey(getNumKeycode(BOARD_REV_VALUE));
     emitKey(KEY_ENTER);
 
     // VER.
-    emitString(about2);
+    emitString(about_ver);
     emitKey(getNumKeycode((APP_VERSION_VALUE >> 8) & 0xf));
     emitKey(KEY_PERIOD);
     emitKey(getNumKeycode((APP_VERSION_VALUE >> 4) & 0xf));
     emitKey(getNumKeycode(APP_VERSION_VALUE & 0xf));
 #if 0
     emitKey(KEY_ENTER);
+
+#ifdef WITH_HOS
+    emitString(about_ble);
+    emitString(about_rev);
+    emitKey(getNumKeycode(HosGetRevision() & 0xf));
+    emitKey(KEY_ENTER);
+
+    emitString(about_ver);
+    emitKey(getNumKeycode((HosGetVersion() >> 8) & 0xf));
+    emitKey(KEY_PERIOD);
+    emitKey(getNumKeycode((HosGetVersion() >> 4) & 0xf));
+    emitKey(getNumKeycode(HosGetVersion() & 0xf));
+    emitKey(KEY_ENTER);
+
+    emitString(about_copyright);
+
+    emitString(about_kvm);
+    emitKey(getNumKeycode(CurrentProfile()));
+    emitKey(KEY_ENTER);
+
+    if (!isUSBMode()) {
+        emitString(about_lesc);
+        emitKey(getNumKeycode(HosGetLESC()));
+        emitKey(KEY_ENTER);
+    }
+#else
+    emitString(about_copyright);
 #endif
-    
+
     // F2 OS
-    emitString(about3);
+    emitString(about_f2);
     emitOSName();
 
     // F3 Layout
-    emitString(about4);
+    emitString(about_f3);
     emitBaseName();
 
     // F4 Kana Layout
-    emitString(about5);
+    emitString(about_f4);
     emitKanaName();
 
     // F5 Delay
-    emitString(about6);
+    emitString(about_f5);
     emitDelayName();
 
     // F6 Modifiers
-    emitString(about7);
+    emitString(about_f6);
     emitModName();
 
     // F7 IME
-    emitString(about8);
+    emitString(about_f7);
     emitIMEName();
 
     // F8 LED
-    emitString(about9);
+    emitString(about_f8);
     emitLEDName();
 
     // F9 Prefix Shift
-    emitString(about10);
+    emitString(about_f9);
     emitPrefixShift();
 
 #ifdef ENABLE_MOUSE
     emitMouse();
 #endif
 
-#ifdef NRF51
-{
-    uint32_t voltage = battery_voltage_get();
-    emitKey(getNumKeycode(voltage / 100));
-    emitKey(KEY_PERIOD);
-    voltage %= 100;
-    emitKey(getNumKeycode(voltage / 10));
-    emitKey(getNumKeycode(voltage % 10));
-    emitKey(KEY_V);
-    emitKey(KEY_ENTER);
-}
+#ifdef WITH_HOS
+    if (!isBusPowered()) {
+        uint16_t voltage = HosGetBatteryVoltage();
+        uint8_t level = HosGetBatteryLevel();
+        if (HOS_BATTERY_VOLTAGE_OFFSET < voltage) {
+            emitKey(getNumKeycode(voltage / 100));
+            emitKey(KEY_PERIOD);
+            voltage %= 100;
+            emitKey(getNumKeycode(voltage / 10));
+            emitKey(getNumKeycode(voltage % 10));
+            emitKey(KEY_V);
+            emitKey(KEY_SPACEBAR);
+            emitNumber(level);
+            emitKey(KEYPAD_PERCENT);
+            emitKey(KEY_ENTER);
+        }
+    }
 #endif
 }
 
@@ -488,6 +561,17 @@ static const uint8_t* getKeyFn(uint8_t code)
     return matrixFn[code / 12][code % 12];
 }
 
+#ifdef WITH_HOS
+static void switchProfile(uint8_t profile)
+{
+    SelectProfile(profile);
+    loadKeyboardSettings();
+#ifdef ENABLE_MOUSE
+    loadMouseSettings();
+#endif
+}
+#endif
+
 static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* report)
 {
     int8_t xmit;
@@ -499,37 +583,78 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
         uint8_t modifiers = current[0];
         uint8_t count = 2;
         xmit = XMIT_NORMAL;
-        for (int8_t i = 2; i < 8 && xmit != XMIT_MACRO; ++i) {
+        for (int8_t i = 2; i < 8 && xmit == XMIT_NORMAL; ++i) {
             uint8_t code = current[i];
             const uint8_t* a = getKeyFn(code);
             for (int8_t j = 0; j < 3 && count < 8; ++j) {
                 uint8_t key = a[j];
                 int8_t make = !memchr(processed + 2, code, 6);
+
                 switch (key) {
                 case 0:
                     break;
                 case KEY_F1:
                     if (make) {
-                        about();
-                        xmit = XMIT_MACRO;
+#ifdef WITH_HOS
+                        if (current[0] & MOD_SHIFT) {
+                            switchProfile(1);
+                            modifiers &= ~(MOD_CONTROL | MOD_SHIFT);
+                            xmit = XMIT_BRK;
+                        }
+                        else
+#endif
+                        {
+                            about();
+                            xmit = XMIT_MACRO;
+                        }
                     }
                     break;
                 case KEY_F2:
                     if (make) {
-                        switchOS();
-                        xmit = XMIT_MACRO;
+#ifdef WITH_HOS
+                        if (current[0] & MOD_SHIFT) {
+                            switchProfile(2);
+                            modifiers &= ~(MOD_CONTROL | MOD_SHIFT);
+                            xmit = XMIT_BRK;
+                        }
+                        else
+#endif
+                        {
+                            switchOS();
+                            xmit = XMIT_MACRO;
+                        }
                     }
                     break;
                 case KEY_F3:
                     if (make) {
-                        switchBase();
-                        xmit = XMIT_MACRO;
+#ifdef WITH_HOS
+                        if (current[0] & MOD_SHIFT) {
+                            switchProfile(3);
+                            modifiers &= ~(MOD_CONTROL | MOD_SHIFT);
+                            xmit = XMIT_BRK;
+                        }
+                        else
+#endif
+                        {
+                            switchBase();
+                            xmit = XMIT_MACRO;
+                        }
                     }
                     break;
                 case KEY_F4:
                     if (make) {
-                        switchKana();
-                        xmit = XMIT_MACRO;
+#ifdef WITH_HOS
+                        if (current[0] & MOD_SHIFT) {
+                            switchProfile(0);
+                            modifiers &= ~(MOD_CONTROL | MOD_SHIFT);
+                            xmit = XMIT_BRK;
+                        }
+                        else
+#endif
+                        {
+                            switchKana();
+                            xmit = XMIT_MACRO;
+                        }
                     }
                     break;
                 case KEY_F5:
@@ -574,44 +699,17 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
                 case KEY_RIGHTSHIFT:
                     modifiers |= MOD_RIGHTSHIFT;
                     break;
-                case KEY_LEFTALT:
-                    modifiers |= MOD_LEFTALT;
-                    break;
-                case KEY_RIGHTALT:
-                    modifiers |= MOD_RIGHTALT;
-                    break;
-                case KEY_LEFT_GUI:
-                    modifiers |= MOD_LEFTGUI;
-                    break;
-                case KEY_RIGHT_GUI:
-                    modifiers |= MOD_RIGHTGUI;
-                    break;
-#ifdef NRF51
+#ifdef WITH_HOS
                 case KEY_ESCAPE:
                     if (make) {
-                        set_event(BSP_EVENT_DISCONNECT);
-                        xmit = XMIT_BRK;
-                    }
-                    break;
-                case KEY_1:
-                    if (make) {
-                        set_event(BSP_EVENT_KEY_1);
-                        modifiers &= ~MOD_LEFTCONTROL;
-                        xmit = XMIT_BRK;
-                    }
-                    break;
-                case KEY_2:
-                    if (make) {
-                        set_event(BSP_EVENT_KEY_2);
-                        modifiers &= ~MOD_LEFTCONTROL;
-                        xmit = XMIT_BRK;
-                    }
-                    break;
-                case KEY_3:
-                    if (make) {
-                        set_event(BSP_EVENT_KEY_3);
-                        modifiers &= ~MOD_LEFTCONTROL;
-                        xmit = XMIT_BRK;
+                        if (!isUSBMode() && (current[0] & MOD_SHIFT)) {
+                            HosSetEvent(HOS_TYPE_DEFAULT, HOS_EVENT_CLEAR_BONDING_DATA);
+                            modifiers &= ~(MOD_CONTROL | MOD_SHIFT);
+                            xmit = XMIT_BRK;
+                        } else {
+                            key = toggleKanaMode(key, current[0], make);
+                            report[count++] = key;
+                        }
                     }
                     break;
 #endif
@@ -622,22 +720,52 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
                 }
             }
         }
+#ifdef WITH_HOS
+        if (count == 2) {
+            modifiers &= ~MOD_SHIFT;
+        }
+#endif
         report[0] = modifiers;
     } else if (isKanaMode(current))
         xmit = processKeysKana(current, processed, report);
     else
         xmit = processKeysBase(current, processed, report);
+
+#ifdef ENABLE_DUAL_ROLE_FN
+    if (isDualRoleFnMod()) {
+        if ((current[1] ^ processed[1]) & MOD_FN) {
+            modFn = (current[1] & MOD_FN);
+            if (modFn) {
+                dualFn = modFn;
+            } else if (dualFn && xmit == XMIT_NORMAL && !report[2]) {
+                uint8_t key = (dualFn & MOD_RIGHTFN) ? KEY_LANG1 : KEY_LANG2;
+                key = toggleKanaMode(key, current[0], 1);
+                report[2] = key;
+                memmove(processed, current, 8);
+                processed[1] |= dualFn;
+                dualFn = 0;
+                return xmit;
+            }
+        }
+        if (dualFn && (xmit != XMIT_NORMAL || report[2])) {
+            dualFn = 0;
+        }
+    }
+#endif
+
     if (xmit == XMIT_NORMAL || xmit == XMIT_IN_ORDER || xmit == XMIT_MACRO)
         memmove(processed, current, 8);
+
     return xmit;
 }
 
 static void processOSMode(uint8_t* report)
 {
     for (int8_t i = 2; i < 8; ++i) {
+        uint8_t key = report[i];
         switch (os) {
         case OS_PC:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
                 report[i] = KEY_F13;
                 break;
@@ -655,8 +783,7 @@ static void processOSMode(uint8_t* report)
             }
             break;
         case OS_MAC:
-            switch (report[i]) {
-#if 0
+            switch (key) {
             case KEY_INTERNATIONAL4:
             case KEY_INTERNATIONAL5:
                 report[i] = KEY_SPACEBAR;
@@ -670,12 +797,17 @@ static void processOSMode(uint8_t* report)
                     --i;
                 }
                 break;
+#ifdef WITH_HOS
+            case KEYPAD_ENTER:
+                report[i] = KEY_ENTER;
+                break;
+#endif
             default:
                 break;
             }
             break;
         case OS_104A:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
                 report[i] = KEY_SPACEBAR;
                 report[0] |= MOD_LEFTSHIFT | MOD_LEFTCONTROL;
@@ -695,7 +827,7 @@ static void processOSMode(uint8_t* report)
             }
             break;
         case OS_104B:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
             case KEY_LANG2:
                 report[i] = KEY_GRAVE_ACCENT;
@@ -712,7 +844,7 @@ static void processOSMode(uint8_t* report)
             }
             break;
         case OS_109A:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
                 report[i] = KEY_INTERNATIONAL4;
                 report[0] |= MOD_LEFTSHIFT | MOD_LEFTCONTROL;
@@ -726,7 +858,7 @@ static void processOSMode(uint8_t* report)
             }
             break;
         case OS_109B:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
             case KEY_LANG2:
                 report[i] = KEY_GRAVE_ACCENT;
@@ -736,7 +868,7 @@ static void processOSMode(uint8_t* report)
             }
             break;
         case OS_ALT_SP:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
             case KEY_LANG2:
                 report[i] = KEY_SPACEBAR;
@@ -747,7 +879,7 @@ static void processOSMode(uint8_t* report)
             }
             break;
         case OS_SHIFT_SP:
-            switch (report[i]) {
+            switch (key) {
             case KEY_LANG1:
             case KEY_LANG2:
                 report[i] = KEY_SPACEBAR;
@@ -766,9 +898,22 @@ static void processOSMode(uint8_t* report)
 uint8_t processModKey(uint8_t key)
 {
     const uint8_t* map = modMap[0];
+    uint8_t xfer = mod;
+#ifdef ENABLE_DUAL_ROLE_FN
+    switch (mod) {
+    case MOD_CX:
+        xfer = MOD_C;
+        break;
+    case MOD_SX:
+        xfer = MOD_S;
+        break;
+    default:
+        break;
+    }
+#endif
     for (int8_t i = 0; i < MAX_MOD_KEYS; ++i) {
         if (key == map[i])
-            return modMap[mod][i];
+            return modMap[xfer][i];
     }
     return key;
 }
@@ -785,7 +930,7 @@ int8_t makeReport(uint8_t* report)
         memmove(keys[currentKey].keys, current + 2, 6);
         current[0] = modifiers;
         if (led & LED_SCROLL_LOCK)
-            current[1] |= MOD_FN;
+            current[1] |= MOD_LEFTFN;
 #ifdef ENABLE_MOUSE
         if (isMouseTouched())
             current[1] |= MOD_PAD;
@@ -801,12 +946,12 @@ int8_t makeReport(uint8_t* report)
         modifiersPrev = modifiers;
 
         // Copy keys that exist in both keys[prev] and keys[at] for debouncing.
-        at = currentKey + MAX_DELAY + 2 - currentDelay;
-        if (MAX_DELAY + 1 < at)
-                at -= MAX_DELAY + 2;
-        prev = at + MAX_DELAY + 1;
-        if (MAX_DELAY + 1 < prev)
-                prev -= MAX_DELAY + 2;
+        at = currentKey + DELAY_MAX + 2 - currentDelay;
+        if (DELAY_MAX + 1 < at)
+                at -= DELAY_MAX + 2;
+        prev = at + DELAY_MAX + 1;
+        if (DELAY_MAX + 1 < prev)
+                prev -= DELAY_MAX + 2;
         count = 2;
         for (int8_t i = 0; i < 6; ++i) {
             uint8_t key = keys[at].keys[i];
@@ -836,24 +981,19 @@ int8_t makeReport(uint8_t* report)
         }
         processOSMode(report);
     } else {
-        prev = currentKey + MAX_DELAY + 1;
-        if (MAX_DELAY + 1 < prev)
-                prev -= MAX_DELAY + 2;
+        prev = currentKey + DELAY_MAX + 1;
+        if (DELAY_MAX + 1 < prev)
+                prev -= DELAY_MAX + 2;
         memmove(keys[currentKey].keys, keys[prev].keys, 6);
     }
 
-    if (MAX_DELAY + 1 < ++currentKey)
+    if (DELAY_MAX + 1 < ++currentKey)
         currentKey = 0;
     count = 2;
     modifiers = 0;
     current[1] = 0;
 
     return xmit;
-}
-
-uint8_t getLED(void)
-{
-    return led;
 }
 
 uint8_t controlLED(uint8_t report)
@@ -864,7 +1004,6 @@ uint8_t controlLED(uint8_t report)
     if (isMouseTouched())
         report |= LED_SCROLL_LOCK;
 #endif
-#ifdef __XC8
     if (BOARD_REV_VALUE < 3) {
         static int8_t tick;
 
@@ -873,7 +1012,6 @@ uint8_t controlLED(uint8_t report)
         else
             report &= ~LED_USB_DEVICE_HID_KEYBOARD_CAPS_LOCK;
     }
-#endif
     return report;
 }
 

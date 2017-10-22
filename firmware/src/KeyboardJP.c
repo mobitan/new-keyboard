@@ -1,6 +1,5 @@
 /*
- * Copyright 2013-2014 Esrille Inc.
- * Modified by mobitan, 2016.
+ * Copyright 2013-2016 Esrille Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +17,7 @@
 #include "Keyboard.h"
 
 #include <string.h>
-
-#ifdef __XC8
-#include <xc.h>
-#endif
+#include <system.h>
 
 #define MAX_KANA_KEY_NAME    6
 
@@ -393,17 +389,17 @@ static uint8_t sent[3];
 static uint8_t last[3];
 static uint8_t lastMod;
 
-void initKeyboardKana(void)
+void loadKanaSettings(void)
 {
-    mode = eeprom_read(EEPROM_KANA);
+    mode = ReadNvram(EEPROM_KANA);
     if (KANA_MAX < mode)
         mode = 0;
 
-    led = eeprom_read(EEPROM_LED);
+    led = ReadNvram(EEPROM_LED);
     if (LED_MAX < led)
         led = LED_DEFAULT;
 
-    ime = eeprom_read(EEPROM_IME);
+    ime = ReadNvram(EEPROM_IME);
     if (IME_MAX < ime)
         ime = 0;
 }
@@ -418,7 +414,7 @@ void switchLED(void)
     ++led;
     if (LED_MAX < led)
         led = 0;
-    eeprom_write(EEPROM_LED, led);
+    WriteNvram(EEPROM_LED, led);
     emitLEDName();
 }
 
@@ -432,7 +428,7 @@ void switchKana(void)
     ++mode;
     if (KANA_MAX < mode)
         mode = 0;
-    eeprom_write(EEPROM_KANA, mode);
+    WriteNvram(EEPROM_KANA, mode);
     emitKanaName();
 }
 
@@ -446,7 +442,7 @@ void switchIME(void)
     ++ime;
     if (IME_MAX < ime)
         ime = 0;
-    eeprom_write(EEPROM_IME, ime);
+    WriteNvram(EEPROM_IME, ime);
     emitIMEName();
 }
 

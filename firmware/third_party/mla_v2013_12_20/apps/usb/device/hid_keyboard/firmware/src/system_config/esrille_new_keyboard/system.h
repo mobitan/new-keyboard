@@ -1,3 +1,11 @@
+/*
+ * Copyright 2014-2016 Esrille Inc.
+ *
+ * This file is a modified version of system.h provided by
+ * Microchip Technology, Inc. for using Esrille New Keyboard.
+ * See the file NOTICE for copying permission.
+ */
+
 /********************************************************************
  Software License Agreement:
 
@@ -28,6 +36,7 @@
 
 #include <buttons.h>
 #include <leds.h>
+#include <nvram.h>
 
 #include <io_mapping.h>
 #include <fixed_address_memory.h>

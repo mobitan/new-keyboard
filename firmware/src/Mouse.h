@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Esrille Inc.
+ * Copyright 2015, 2016 Esrille Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,14 @@
 
 #include <stdint.h>
 
+#define PAD_SENSE_1      0
+#define PAD_SENSE_2      1
+#define PAD_SENSE_3      2
+#define PAD_SENSE_4      3
+#define PAD_SENSE_MAX    PAD_SENSE_4
+
 void initMouse(void);
+void loadMouseSettings(void);
 void emitMouse(void);
 int8_t processSerialUnit(uint8_t data);
 void processMouseKeys(uint8_t* current, const uint8_t* processed);
@@ -28,6 +35,10 @@ uint8_t getKeyboardMouseButtons(void);
 int8_t getKeyboardMouseX(void);
 int8_t getKeyboardMouseY(void);
 int8_t getKeyboardMouseWheel(void);
+int8_t isProcessingSrialData(void);
+
+#ifdef WITH_HOS
+void processMouseData(void);
+#endif
 
 #endif  // #ifndef MOUSE_H
-
