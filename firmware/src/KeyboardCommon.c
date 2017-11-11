@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2016 Esrille Inc.
+ * Copyright 2013-2017 Esrille Inc.
  * Modified by mobitan, 2016-2017.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 #include <string.h>
 #include <system.h>
 
-#define ENABLE_SWITCHING
+// #define DISABLE_SWITCHING
 
 NVRAM_DATA(BASE_QWERTY, KANA_ROMAJI, OS_PC, DELAY_12, MOD_DEFAULT, LED_DEFAULT, IME_MS, PAD_SENSE_1);
 
@@ -384,8 +384,8 @@ static const uint8_t about_ver[] = {
     KEY_V, KEY_E, KEY_R, KEY_PERIOD, KEY_SPACEBAR, 0
 };
 static const uint8_t about_copyright[] = {
-	KEY_MINUS, KEY_M, KEY_O, KEY_B, KEY_I, KEY_T, KEY_A, KEY_N, KEY_ENTER,
-    KEY_C, KEY_O, KEY_P, KEY_Y, KEY_R, KEY_I, KEY_G, KEY_H, KEY_T, KEY_SPACEBAR, KEY_2, KEY_0, KEY_1, KEY_3, KEY_MINUS, KEY_2, KEY_0, KEY_1, KEY_6, KEY_SPACEBAR,
+    KEY_MINUS, KEY_M, KEY_O, KEY_B, KEY_I, KEY_T, KEY_A, KEY_N, KEY_ENTER,
+    KEY_C, KEY_O, KEY_P, KEY_Y, KEY_R, KEY_I, KEY_G, KEY_H, KEY_T, KEY_SPACEBAR, KEY_2, KEY_0, KEY_1, KEY_3, KEY_MINUS, KEY_2, KEY_0, KEY_1, KEY_7, KEY_SPACEBAR,
     KEY_E, KEY_S, KEY_R, KEY_I, KEY_L, KEY_L, KEY_E, KEY_SPACEBAR, KEY_I, KEY_N, KEY_C, KEY_PERIOD, KEY_ENTER, 0
 };
 static const uint8_t about_f2[] = {
@@ -567,7 +567,7 @@ static int8_t processKeys(const uint8_t* current, uint8_t* processed, uint8_t* r
                 switch (key) {
                 case 0:
                     break;
-#ifdef ENABLE_SWITCHING
+#ifndef DISABLE_SWITCHING
                 case KEY_F1:
                     if (make) {
 #ifdef WITH_HOS

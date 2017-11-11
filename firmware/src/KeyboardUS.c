@@ -20,10 +20,10 @@
 #include <string.h>
 #include <system.h>
 
-// #define ENABLE_DVORAK
-// #define ENABLE_COLEMAK
-// #define ENABLE_JIS
-// #define ENABLE_NICOLA_F
+#define DISABLE_DVORAK
+#define DISABLE_COLEMAK
+#define DISABLE_JIS
+#define DISABLE_NICOLA_F
 
 static uint8_t const baseKeys[BASE_MAX + 1][5] =
 {
@@ -46,7 +46,7 @@ static uint8_t const matrixQwerty[8][12] =
     KEY_LEFTCONTROL, KEY_EQUAL, KEY_LEFTALT, KEY_SPACEBAR, KEY_LEFT_FN, KEY_LEFTSHIFT, KEY_RIGHTSHIFT, KEY_RIGHT_FN, KEY_INTERNATIONAL1, KEY_BACKSPACE, KEY_DELETE, KEY_RIGHTCONTROL
 };
 
-#ifdef ENABLE_DVORAK
+#ifndef DISABLE_DVORAK
 static uint8_t const matrixDvorak[8][12] =
 {
     KEY_LEFT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_BACKSLASH,
@@ -60,7 +60,7 @@ static uint8_t const matrixDvorak[8][12] =
 };
 #endif
 
-#ifdef ENABLE_COLEMAK
+#ifndef DISABLE_COLEMAK
 static uint8_t const matrixColemak[8][12] =
 {
     KEY_LEFT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_EQUAL,
@@ -91,7 +91,7 @@ static uint8_t const matrixColemak[8][12] =
 // zenkaku      KEY_GRAVE_ACCENT
 //
 
-#ifdef ENABLE_JIS
+#ifndef DISABLE_JIS
 static uint8_t const matrixJIS[8][12] =
 {
     KEY_RIGHT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_EQUAL,
@@ -105,7 +105,7 @@ static uint8_t const matrixJIS[8][12] =
 };
 #endif
 
-#ifdef ENABLE_NICOLA_F
+#ifndef DISABLE_NICOLA_F
 static uint8_t const matrixNicolaF[8][12] =
 {
     KEY_RIGHT_BRACKET, KEY_F2, KEY_F3, KEY_F4, KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_MINUS,
@@ -181,22 +181,22 @@ uint8_t getKeyBase(uint8_t code)
     case BASE_QWERTY:
         key = matrixQwerty[row][column];
         break;
-#ifdef ENABLE_DVORAK
+#ifndef DISABLE_DVORAK
     case BASE_DVORAK:
         key = matrixDvorak[row][column];
         break;
 #endif
-#ifdef ENABLE_COLEMAK
+#ifndef DISABLE_COLEMAK
     case BASE_COLEMAK:
         key = matrixColemak[row][column];
         break;
 #endif
-#ifdef ENABLE_JIS
+#ifndef DISABLE_JIS
     case BASE_JIS:
         key = matrixJIS[row][column];
         break;
 #endif
-#ifdef ENABLE_NICOLA_F
+#ifndef DISABLE_NICOLA_F
     case BASE_NICOLA_F:
         key = matrixNicolaF[row][column];
         break;

@@ -132,7 +132,7 @@
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Esrille_New_Keyboard" type="2">
+    <conf name="PIC18F4550_NISSE" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC18F4550</targetDevice>
@@ -188,6 +188,22 @@
       <item path="../../../../../../../../src/HosMaster.h"
             ex="true"
             overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../../../../../../../../src/Mouse.c" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../../../../../../../../src/Mouse.h" ex="true" overriding="false">
         <HI-TECH-COMP>
         </HI-TECH-COMP>
         <HI-TECH-LINK>
@@ -275,6 +291,14 @@
         <XC8-config-global>
         </XC8-config-global>
       </item>
+      <item path="../src/app_device_mouse.c" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
       <item path="../src/system_config/pic18f47j53_nisse/fixed_address_memory.h"
             ex="true"
             overriding="false">
@@ -317,7 +341,8 @@
       </item>
       <HI-TECH-COMP>
         <property key="asmlist" value="true"/>
-        <property key="define-macros" value="ENABLE_DUAL_ROLE_FN"/>
+        <property key="define-macros"
+                  value="ENABLE_DUAL_ROLE_FN;DISABLE_MTYPE;DISABLE_STICKNEY"/>
         <property key="disable-optimizations" value="false"/>
         <property key="extra-include-directories"
                   value="../../../../../../../../src;../src;../../../../../../framework;../../../../../../bsp/esrille_new_keyboard;../src/system_config/esrille_new_keyboard"/>
@@ -434,7 +459,7 @@
         <property key="stack-type" value="compiled"/>
       </XC8-config-global>
     </conf>
-    <conf name="Esrille_New_Keyboard_with_Mouse" type="2">
+    <conf name="PIC18F4550_NISSE_TSAP" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC18F4550</targetDevice>
@@ -442,7 +467,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.34</languageToolchainVersion>
+        <languageToolchainVersion></languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <compileType>
@@ -619,7 +644,8 @@
       </item>
       <HI-TECH-COMP>
         <property key="asmlist" value="true"/>
-        <property key="define-macros" value="ENABLE_MOUSE;ENABLE_DUAL_ROLE_FN"/>
+        <property key="define-macros"
+                  value="ENABLE_MOUSE;ENABLE_DUAL_ROLE_FN;DISABLE_MTYPE;DISABLE_STICKNEY"/>
         <property key="disable-optimizations" value="false"/>
         <property key="extra-include-directories"
                   value="../../../../../../../../src;../src;../../../../../../framework;../../../../../../bsp/esrille_new_keyboard;../src/system_config/esrille_new_keyboard"/>
@@ -771,6 +797,22 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
+      <item path="../../../../../../../../src/Mouse.c" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../../../../../../../../src/Mouse.h" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
       <item path="../../../../../../bsp/esrille_new_keyboard/buttons.c"
             ex="true"
             overriding="false">
@@ -824,6 +866,14 @@
       <item path="../../../../../../bsp/esrille_new_keyboard/power.h"
             ex="true"
             overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../src/app_device_mouse.c" ex="true" overriding="false">
         <HI-TECH-COMP>
         </HI-TECH-COMP>
         <HI-TECH-LINK>
@@ -1279,6 +1329,22 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
+      <item path="../../../../../../../../src/Mouse.c" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../../../../../../../../src/Mouse.h" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
       <item path="../../../../../../bsp/esrille_new_keyboard/buttons.c"
             ex="true"
             overriding="false">
@@ -1332,6 +1398,22 @@
       <item path="../../../../../../bsp/esrille_new_keyboard/power.h"
             ex="true"
             overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../src/app_device_mouse.c" ex="true" overriding="false">
+        <HI-TECH-COMP>
+        </HI-TECH-COMP>
+        <HI-TECH-LINK>
+        </HI-TECH-LINK>
+        <XC8-config-global>
+        </XC8-config-global>
+      </item>
+      <item path="../src/app_device_mouse.h" ex="true" overriding="false">
         <HI-TECH-COMP>
         </HI-TECH-COMP>
         <HI-TECH-LINK>
